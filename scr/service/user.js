@@ -39,9 +39,20 @@ async function deleteUser(id) {
     await connection.end();
 }
 
+async function getUserById(id) {
+    const connection = await mysql.createConnection(databaseConfig);
+
+    const [user] = await connection.query("SELECT * FROM user WHERE id = ?", [id]);
+
+    await connection.end();
+
+    return user;
+}
+
 module.exports = {
     getAllUser,
     createUser,
     updateUser,
     deleteUser,
+    getUserById,
 }

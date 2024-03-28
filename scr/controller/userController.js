@@ -35,11 +35,11 @@ async function createUser(req, res){
 async function updateUser(req, res) {
     try{
         const { id } = req.params;
-        const { name, password, email } = req.params;
+        const { name, password, email } = req.body;
 
         await userService.updateUser(id, name, password, email);
 
-        res.status(204).json("Success");
+        res.status(200).send("Success");
     }catch(error) {
         res.status(500).send({
             message: ("Error updating user!"),
@@ -48,8 +48,41 @@ async function updateUser(req, res) {
     }
 }
 
+async function deleteUser(req, res) {
+
+    try {
+    const { id } = req.params;
+
+    await userService.deleteUser(id);
+
+    res.status(200).send({message: "Deleted User!"});
+    } catch (error) {
+        res.status(500).send({
+            message: "Error deleting user!",
+            error: error.message,
+        })
+    }
+}
+
+async function getUserById(req, res) {
+    try {
+        const { id } = req.params;
+
+        const user = await userService.getUserById(id);
+
+        res.status(200).json(user);
+    }catch(error) {
+        res.status(500).send({
+            message: "Error getting user by ID.",
+            error: error.message,
+        });
+    }
+}
+
 module.exports = {
     getAllUser,
     createUser,
     updateUser,
-}
+    deleteUser,
+    getUserById,
+};
